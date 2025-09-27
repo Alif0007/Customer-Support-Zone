@@ -1,9 +1,22 @@
 import React, { use } from "react";
 import Ticket from "./Ticket";
+import { toast } from "react-toastify";
 
-const ticketList = ({ticketListPromise}) => {
+
+const ticketList = ({ticketListPromise,ticketData,setTicketData}) => {
+    
     const ticketList = use(ticketListPromise)
-    console.log(ticketList)
+    const inProgressHandle = (ticket)=> {
+       
+       setTicketData([...ticketData,ticket])
+       toast.info('In Progress', {
+           style: {
+               border: '2px solid #22c55e' // Green border for success
+           }
+           });
+       
+        
+    }
     return(
         
         <div className=" grid grid-cols-1 gap-3 lg:grid-cols-2">
@@ -11,7 +24,9 @@ const ticketList = ({ticketListPromise}) => {
          {
             ticketList.map(ticketList =>
                 <Ticket key={ticketList.id}
-                ticket={ticketList}></Ticket>
+                inProgressHandle = {inProgressHandle}
+                ticket={ticketList}
+                ticketData= {ticketData} setTicketData = {setTicketData}></Ticket>
             )
             
          }

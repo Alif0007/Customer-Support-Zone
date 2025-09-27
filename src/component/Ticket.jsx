@@ -1,10 +1,12 @@
 import React from "react";
 
-const ticket = ({ ticket }) => {
+const ticket = ({ ticket,inProgressHandle }) => {
 const {id, title, description, customer, priority, status, createdAt} = ticket ;
+
+
     return (
-        <div>
-            <div className="h-full">
+        <div onClick={() =>inProgressHandle(ticket)}>
+            <div className="h-full cursor-pointer">
                 <div className=" bg-gray-50 h-full">
                     <div className="h-full">
 
@@ -40,7 +42,7 @@ const {id, title, description, customer, priority, status, createdAt} = ticket ;
                                     <div className="text-sm text-gray-700">{customer}</div>
                                     <div className=" inline-flex items-center text-xs text-gray-500">
 
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 mr-2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 mr-2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                                             <path d="M8 7V3"></path>
                                             <path d="M16 7V3"></path>
                                             <path d="M3 11h18"></path>

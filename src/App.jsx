@@ -1,16 +1,41 @@
 import { useState, Suspense } from 'react'
 import './App.css'
 import TicketsList from './component/TicketsList';
+import InGoingTask from './component/InGoingTask';
+import ResolveTask from './component/ResolveTask';
+import { ToastContainer, toast } from 'react-toastify';
 
 import Footer from './component/footer';
 
 
 
 
-const ticketListPromise = fetch('./ticket.json').then(res => res.json());
+const ticketListPromise = fetch('/ticket.json').then(res => res.json());
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [ticketData,setTicketData ] = useState([])
+  const [resolveData,setResolveData ] = useState([])
+
+  const resolveTicket = (t) => {
+    toast.success('Resolved', {
+    style: {
+        border: '2px solid #22c55e' // Green border for success
+    }
+    });
+
+
+    
+    const resolveFilterdData = ticketData.filter(ti=> ti.id === t.id)
+    setResolveData([...resolveData,resolveFilterdData])
+    console.log(resolveData)
+  }
+  const removeTicket = (t) =>{
+    
+    const filterdData = ticketData.filter(ti=> ti.id !== t.id)
+    setTicketData(filterdData)
+    
+  } 
+  
 
   return (
     <>
@@ -55,11 +80,11 @@ function App() {
       <div className='flex flex-col lg:flex-row gap-10 mx-15 mt-20'>
         <div className=' flex items-center justify-center flex-col  py-18 gap-4 bg-1 text-white  w-full rounded-2xl'>
           <h1 className='text-2xl'>In-Progress</h1>
-          <p className='text-5xl font-semibold'>0</p>
+          <p className='text-5xl font-semibold'>{ticketData.length}</p>
         </div>
         <div className=' flex items-center justify-center flex-col  py-18 gap-4 bg-2 text-white  w-full rounded-2xl'>
           <h1 className='text-2xl'>Resolved</h1>
-          <p className='text-5xl font-semibold'>0</p>
+          <p className='text-5xl font-semibold'>{resolveData.length}</p>
         </div>
 
 
@@ -67,20 +92,22 @@ function App() {
 
 
       <div className='flex flex-col-reverse lg:flex-row px-15 gap-5 my-12 '>
-        <div className=''>
+        <div className='w-full lg:w-9/12'>
           <h1 className='text-2xl font-semibold text-gray-700 mb-5'>Customer Ticket </h1>
           <Suspense >
-            <TicketsList ticketListPromise={ticketListPromise}>
+            <TicketsList ticketListPromise={ticketListPromise} ticketData={ticketData} setTicketData={setTicketData} >
 
             </TicketsList>
           </Suspense>
         </div>
-        <div className='w-full lg:w-2/9'>
+        <div className='w-full lg:w-3/12'>
           <div>
           <h1 className='text-2xl font-semibold text-gray-700'>Task Status </h1>
+          <InGoingTask ticketData={ticketData} removeTicket={removeTicket} resolveTicket={resolveTicket}></InGoingTask>
         </div>
         <div>
           <h1 className='text-2xl font-semibold text-gray-700'>Resolved Task</h1>
+          <ResolveTask resolveData={resolveData}></ResolveTask>
         </div>
 
         </div>
@@ -91,7 +118,9 @@ function App() {
       <Footer></Footer>
 
       
-
+      
+        <ToastContainer />
+      
     </>
   )
 }
